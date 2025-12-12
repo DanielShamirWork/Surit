@@ -10,6 +10,16 @@
             "problemMatcher": [
                 "$gcc"
             ]
+        },
+        {
+            "label": "make test",
+            "type": "shell",
+            "command": "make test",
+            "args": [],
+            "group": "build",
+            "problemMatcher": [
+                "$gcc"
+            ]
         }
     ]
 }

@@ -8,9 +8,6 @@
 #include <vector>
 
 HuffmanNode *build_tree(const symbol * const str);
-const HuffmanDict generate_huffman_dict(const HuffmanNode * const tree_root);
-
-symbol *compress(const symbol * const str);
-symbol *decompress(const symbol * const str);
+const HuffmanDict generate_huffman_dict(const symbol * const str);
 
 #endif // HUFFMAN_H

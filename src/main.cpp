@@ -10,12 +10,10 @@
 
 using namespace std;
 
-const symbol *str1 = "aabcbad";
-
 void test_frequencies(const symbol *str) {
     unordered_map<symbol, uint64_t> freqs = frequencies(str);
 
-    printf("string: %s\n", str);
+    printf("Frequencey test on string: %s\n", str);
     for (auto it = freqs.begin(); it != freqs.end(); it++) {
         printf("symbol %c -> frequency %lu\n", it->first, it->second);
     }
@@ -23,11 +21,15 @@ void test_frequencies(const symbol *str) {
 }
 
 void test_build_tree(const symbol *str) {
-    printf("string: %s\n", str);
+    printf("Build tree test on string: %s\n", str);
     HuffmanNode *root = build_tree(str);
 
     // recursive lambda function (pretty cool!)
     std::function<void(HuffmanNode*, int)> print_node = [&](HuffmanNode *node, int depth) {
+        if (node == nullptr) {
+            return;
+        }
+        
         // indent
         string indent(depth, '\t');
         
@@ -47,11 +49,9 @@ void test_build_tree(const symbol *str) {
 }
 
 void test_generate_huffman_dict(const symbol *str) {
-    printf("string: %s\n", str);
-    HuffmanNode *root = build_tree(str);
-    HuffmanDict dict = generate_huffman_dict(root);
+    printf("Generate Huffman dict test on string: %s\n", str);
+    HuffmanDict dict = generate_huffman_dict(str);
 
-    printf("dict:\n");
     for (symbol sym : dict.get_symbols()) {
         const uint8_t *code = dict.get_code(sym);
         printf("symbol %c -> code: ", sym);
@@ -64,26 +64,32 @@ void test_generate_huffman_dict(const symbol *str) {
 }
 
 void test_write_file(const symbol *str, char *filename = "output.huff") {
-    printf("string: %s\n", str);
-    HuffmanNode *root = build_tree(str);
-    HuffmanDict dict = generate_huffman_dict(root);
+    printf("Write file test on string: %s\n", str);
+    HuffmanDict dict = generate_huffman_dict(str);
 
     filesystem::remove(filename); // remove existing file if any
     HuffmanFileWriter writer(filename, dict);
 
     writer.write_string(str);
 
-    printf("written to output.huff\n\n");
+    printf("written to %s\n", filename);
+    printf("\n");
 }
 
-int main(/* int argc, char **argv */) {
-    // test_frequencies(str1);
+int main(int argc, char **argv) {
+    if (argc != 2) {
+        printf("Usage: %s <string>\n", argv[0]);
+        return 1;
+    }
 
-    // test_build_tree(str1);
+    const symbol *str = (const symbol *)argv[1];
+    test_frequencies(str);
 
-    // test_generate_huffman_dict(str1);
+    test_build_tree(str);
 
-    test_write_file(str1, "str1.huff");
+    test_generate_huffman_dict(str);
+
+    test_write_file(str, "output.huff");
 
     return 0;
 }

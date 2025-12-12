@@ -2,12 +2,15 @@
 
 #include "../freq/freq.h"
 #include <queue>
-#include <stack>
 #include <functional>
 
 using namespace std;
 
 HuffmanNode *build_tree(const symbol * const str) {
+    if (str[0] == '\0') {
+        return nullptr; // empty string case
+    }
+
     unordered_map<symbol, uint64_t> freqs = frequencies(str);
     priority_queue<HuffmanNode*, vector<HuffmanNode*>, CompareHuffmanNode> min_heap;
 
@@ -19,9 +22,10 @@ HuffmanNode *build_tree(const symbol * const str) {
 
     // build all the internal nodes
     while (min_heap.size() > 1) {
-        HuffmanNode* left = min_heap.top();
-        min_heap.pop();
+        // the left child has the smaller frequency (unless they are equal)
         HuffmanNode* right = min_heap.top();
+        min_heap.pop();
+        HuffmanNode* left = min_heap.top();
         min_heap.pop();
 
         // an internal node is one with a frequency equals the sum of child frequencies
@@ -32,44 +36,49 @@ HuffmanNode *build_tree(const symbol * const str) {
     return min_heap.top();
 }
 
-const HuffmanDict generate_huffman_dict(const HuffmanNode * const tree_root) {
-    HuffmanDict dict;
-    stack<const HuffmanNode *> node_stack;
-    stack<uint8_t> code_stack;
-    vector<uint8_t> code;
-
-    // DFS iteration over the tree
-    node_stack.push(tree_root);
-    while (!node_stack.empty()) {
-        const HuffmanNode * const node = node_stack.top();
-        node_stack.pop();
-
-        if (code_stack.size() > 0) {
-            code.push_back(code_stack.top());
-            code_stack.pop();
-        }
-        
-        if (node->right != nullptr) {
-            code_stack.push(BIT_TO_CODE(1));
-            node_stack.push(node->right);
-        }
-        if (node->left != nullptr) {
-            code_stack.push(BIT_TO_CODE(0));
-            node_stack.push(node->left);
-        }
-        if (node->left == nullptr && node->right == nullptr) {
-            dict.allocate_symbol(node->sym, code);
-            code.pop_back(); // don't forget to erase the last code
-        }
+// this function generates the code for each symbol by traversing the tree recursively
+void generate_code_recursive(const HuffmanNode *node, vector<uint8_t> &code, HuffmanDict &dict) {
+    if (node == nullptr) {
+        return;
     }
 
+    // leaf node
+    if (node->left == nullptr && node->right == nullptr) {
+        dict.allocate_symbol(node->sym, code);
+        return;
+    }
+
+    if (node->left != nullptr) {
+        code.push_back(BIT_TO_CODE(0));
+        generate_code_recursive(node->left, code, dict);
+        code.pop_back();
+    }
+
+    if (node->right != nullptr) {
+        code.push_back(BIT_TO_CODE(1));
+        generate_code_recursive(node->right, code, dict);
+        code.pop_back();
+    }
+}
+
+const HuffmanDict generate_huffman_dict(const symbol * const str) {
+    HuffmanDict dict;
+
+    if (str[0] == '\0') {
+        return dict; // empty string case
+    }
+
+    const HuffmanNode * const tree_root = build_tree(str);
+    vector<uint8_t> code;
+
+    // Special case for a single unique character
+    if (tree_root->left == nullptr && tree_root->right == nullptr) {
+        code.push_back(BIT_TO_CODE(0));
+        dict.allocate_symbol(tree_root->sym, code);
+    } else {
+        generate_code_recursive(tree_root, code, dict);
+    }
+
+    delete tree_root; // free the tree memory
     return dict;
-}
-
-symbol *compress(const symbol * const str) {
-    return nullptr;
-}
-
-symbol *decompress(const symbol * const str) {
-    return nullptr;
 }
