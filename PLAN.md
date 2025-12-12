@@ -8,10 +8,10 @@
 ### Weeks 1-2: Core Compression Logic (The "Engine")
 **Focus:** Transforming raw data into Huffman codes.
 
-- [ ] **Frequency Analysis:** Implement a function to read input bytes and count character occurrences.
-- [ ] **Priority Queue:** Create a min-heap structure to sort characters by frequency.
-- [ ] **Construct Huffman Tree:** Build the binary tree where leaves are characters and nodes are combined frequencies.
-- [ ] **Generate Lookup Table:** Traverse the tree to create a map of bit-codes (e.g., `'A' -> 010`).
+- [V] **Frequency Analysis:** Implement a function to read input bytes and count character occurrences.
+- [V] **Priority Queue:** Create a min-heap structure to sort characters by frequency.
+- [V] **Construct Huffman Tree:** Build the binary tree where leaves are characters and nodes are combined frequencies.
+- [V] **Generate Lookup Table:** Traverse the tree to create a map of bit-codes (e.g., `'A' -> 010`).
 - [ ] **Implement "BitWriter" Class:**
     * *Challenge:* Standard C++ I/O writes bytes (8 bits).
     * *Task:* Create a class that buffers individual bits and flushes them to a stream only when a full byte is ready.

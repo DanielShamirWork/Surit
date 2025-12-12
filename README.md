@@ -12,6 +12,6 @@ The library is currently in early development. It will serve as a playground for
 
     Run-Length Encoding (RLE)
 
-    Huffman Coding
+    Huffman Coding (recommended reference: cmps-people.ok.ubc.ca/ylucet/DS/Huffman.html)
 
 The goal is to provide a clean, readable C++ codebase that demonstrates exactly how raw data is analyzed, packed, and restored.
