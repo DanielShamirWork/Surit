@@ -8,7 +8,7 @@
 ### Weeks 1-2: Core Compression Logic (The "Engine")
 **Focus:** Transforming raw data into Huffman codes.
 
-- [ ] **Frequency Analysis:** Implement a function to read input bytes and count character occurrences.
+- [V] **Frequency Analysis:** Implement a function to read input bytes and count character occurrences.
 - [ ] **Priority Queue:** Create a min-heap structure to sort characters by frequency.
 - [ ] **Construct Huffman Tree:** Build the binary tree where leaves are characters and nodes are combined frequencies.
 - [ ] **Generate Lookup Table:** Traverse the tree to create a map of bit-codes (e.g., `'A' -> 010`).
