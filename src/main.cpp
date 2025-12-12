@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <functional>
 #include <string>
+#include <filesystem>
 
 using namespace std;
 
@@ -67,13 +68,10 @@ void test_write_file(const symbol *str, char *filename = "output.huff") {
     HuffmanNode *root = build_tree(str);
     HuffmanDict dict = generate_huffman_dict(root);
 
-    HuffmanFileWriter writer(filename);
+    filesystem::remove(filename); // remove existing file if any
+    HuffmanFileWriter writer(filename, dict);
 
-    for (size_t i = 0; str[i] != '\0'; i++) {
-        const uint8_t *code = dict.get_code(str[i]);
-        writer.write_bits(code);
-    }
-    writer.flush_bits();
+    writer.write_string(str);
 
     printf("written to output.huff\n\n");
 }
@@ -83,9 +81,9 @@ int main(/* int argc, char **argv */) {
 
     // test_build_tree(str1);
 
-    test_generate_huffman_dict(str1);
+    // test_generate_huffman_dict(str1);
 
-    // test_write_file(str1, "str1.huff");
+    test_write_file(str1, "str1.huff");
 
     return 0;
 }

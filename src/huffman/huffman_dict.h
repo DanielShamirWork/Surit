@@ -28,4 +28,12 @@ private:
     vector<symbol> symbols;
 };
 
+inline size_t get_code_length(const uint8_t* code) {
+    size_t len = 0;
+    while (code[len] != 0) {
+        len++;
+    }
+    return len;
+}
+
 #endif // HUFFMAN_DICT_H
