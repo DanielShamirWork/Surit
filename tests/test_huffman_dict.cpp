@@ -62,48 +62,56 @@ TEST_CASE("generate_huffman_dict produces correct dictionary from string", "[huf
     };
     using get_symbol_code_fn = function<vector<uint8_t>(symbol)>;
 
-    // note that the expected codes are not 0/1 but 1/2 to avoid confusion with null-terminator
-    // also the test assumes that in the tree, the left child allways has the higher frequency
+    // note that when two nodes are at the same depth, the left/right assignment may vary
+    // so the codes may differ then what is found on the internet, but the lengths should be the same
     auto [input, expected_code_func] = GENERATE(table<string, get_symbol_code_fn>({
-        {"abb", [](symbol s) {
-            if (s == 'a') return vector<uint8_t>{0};
-            if (s == 'b') return vector<uint8_t>{1};
+        {"aab", [](symbol s) {
+            if (s == 'a') return vector<uint8_t>{1};
+            if (s == 'b') return vector<uint8_t>{0};
             return vector<uint8_t>{};
         }},
         {"aaabbc", [](symbol s) {
-            if (s == 'a') return vector<uint8_t>{1};
-            if (s == 'b') return vector<uint8_t>{0, 0};
-            if (s == 'c') return vector<uint8_t>{0, 1};
+            if (s == 'a') return vector<uint8_t>{0};
+            if (s == 'b') return vector<uint8_t>{1, 1};
+            if (s == 'c') return vector<uint8_t>{1, 0};
             return vector<uint8_t>{};
         }},
         {"aaaabbbccd", [](symbol s) {
+            if (s == 'a') return vector<uint8_t>{0};
+            if (s == 'b') return vector<uint8_t>{1, 0};
+            if (s == 'c') return vector<uint8_t>{1, 1, 1};
+            if (s == 'd') return vector<uint8_t>{1, 1, 0};
+            return vector<uint8_t>{};
+        }},
+        {"aaaabccddd", [](symbol s) {
             if (s == 'a') return vector<uint8_t>{0};
             if (s == 'b') return vector<uint8_t>{1, 1, 0};
             if (s == 'c') return vector<uint8_t>{1, 1, 1};
             if (s == 'd') return vector<uint8_t>{1, 0};
             return vector<uint8_t>{};
         }},
-        {"aaaabccddd", [](symbol s) {
-            if (s == 'a') return vector<uint8_t>{1};
-            if (s == 'b') return vector<uint8_t>{0, 1};
-            if (s == 'c') return vector<uint8_t>{0, 0, 0};
-            if (s == 'd') return vector<uint8_t>{0, 0, 1};
-            return vector<uint8_t>{};
-        }},
-        {"aaaaaa", [](symbol s) {
+        {"aaaaaa", [](symbol s) { // single symbol
             if (s == 'a') return vector<uint8_t>{0};
             return vector<uint8_t>{};
         }},
-        {"", [](symbol s) { // empty string means empty dict
+        {"", [](symbol s) { // empty string means empty dict, so it doesn't matter what we return
             return vector<uint8_t>{};
         }},
         {" 0 11 222 3333 4444 ", [](symbol s) {
-            if (s == ' ') return vector<uint8_t>{0, 0};
-            if (s == '0') return vector<uint8_t>{0, 1, 0, 1};
-            if (s == '1') return vector<uint8_t>{0, 1, 0, 0};
-            if (s == '2') return vector<uint8_t>{0, 1, 1};
-            if (s == '3') return vector<uint8_t>{1, 0};
-            if (s == '4') return vector<uint8_t>{1, 1};
+            if (s == ' ') return vector<uint8_t>{1, 1};
+            if (s == '0') return vector<uint8_t>{1, 0, 1, 0};
+            if (s == '1') return vector<uint8_t>{1, 0, 1, 1};
+            if (s == '2') return vector<uint8_t>{1, 0, 0};
+            if (s == '3') return vector<uint8_t>{0, 1};
+            if (s == '4') return vector<uint8_t>{0, 0};
+
+            return vector<uint8_t>{};
+        }},
+        {"mississippi", [](symbol s) {
+            if (s == 'm') return vector<uint8_t>{1, 0, 0};
+            if (s == 'i') return vector<uint8_t>{1, 1};
+            if (s == 's') return vector<uint8_t>{0};
+            if (s == 'p') return vector<uint8_t>{1, 0, 1};
 
             return vector<uint8_t>{};
         }},

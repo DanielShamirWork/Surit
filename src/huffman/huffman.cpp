@@ -23,9 +23,9 @@ HuffmanNode *build_tree(const symbol * const str) {
     // build all the internal nodes
     while (min_heap.size() > 1) {
         // the left child has the smaller frequency (unless they are equal)
-        HuffmanNode* right = min_heap.top();
-        min_heap.pop();
         HuffmanNode* left = min_heap.top();
+        min_heap.pop();
+        HuffmanNode* right = min_heap.top();
         min_heap.pop();
 
         // an internal node is one with a frequency equals the sum of child frequencies

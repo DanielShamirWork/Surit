@@ -43,3 +43,6 @@
 # build directories
 /build/
 /bin/
+
+# leftover huff files
+*.huff
