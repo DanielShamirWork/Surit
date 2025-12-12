@@ -2,6 +2,7 @@
 #include "defs.h"
 #include "freq/freq.h"
 #include "huffman/huffman.h"
+#include "io/huffman_file.h"
 #include <unordered_map>
 #include <functional>
 #include <string>
@@ -53,12 +54,28 @@ void test_generate_huffman_dict(const symbol *str) {
     for (symbol sym : dict.get_symbols()) {
         const uint8_t *code = dict.get_code(sym);
         printf("symbol %c -> code: ", sym);
-        for (size_t i = 0; code[i] != NULL_CODE_BYTE; i++) {
-            printf("%u", code[i]);
+        for (size_t i = 0; code[i] != 0; i++) {
+            printf("%u", CODE_TO_BIT(code[i])); // convert back to 0/1
         }
         printf("\n");
     }
     printf("\n");
+}
+
+void test_write_file(const symbol *str, char *filename = "output.huff") {
+    printf("string: %s\n", str);
+    HuffmanNode *root = build_tree(str);
+    HuffmanDict dict = generate_huffman_dict(root);
+
+    HuffmanFileWriter writer(filename);
+
+    for (size_t i = 0; str[i] != '\0'; i++) {
+        const uint8_t *code = dict.get_code(str[i]);
+        writer.write_bits(code);
+    }
+    writer.flush_bits();
+
+    printf("written to output.huff\n\n");
 }
 
 int main(/* int argc, char **argv */) {
@@ -67,6 +84,8 @@ int main(/* int argc, char **argv */) {
     // test_build_tree(str1);
 
     test_generate_huffman_dict(str1);
+
+    // test_write_file(str1, "str1.huff");
 
     return 0;
 }

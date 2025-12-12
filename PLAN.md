@@ -11,7 +11,7 @@
 - [V] **Frequency Analysis:** Implement a function to read input bytes and count character occurrences.
 - [V] **Priority Queue:** Create a min-heap structure to sort characters by frequency.
 - [V] **Construct Huffman Tree:** Build the binary tree where leaves are characters and nodes are combined frequencies.
-- [ ] **Generate Lookup Table:** Traverse the tree to create a map of bit-codes (e.g., `'A' -> 010`).
+- [V] **Generate Lookup Table:** Traverse the tree to create a map of bit-codes (e.g., `'A' -> 010`).
 - [ ] **Implement "BitWriter" Class:**
     * *Challenge:* Standard C++ I/O writes bytes (8 bits).
     * *Task:* Create a class that buffers individual bits and flushes them to a stream only when a full byte is ready.

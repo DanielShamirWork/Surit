@@ -15,7 +15,7 @@ HuffmanDict::~HuffmanDict() {
 void HuffmanDict::allocate_symbol(symbol sym, const vector<uint8_t> &code) {
     uint8_t *new_code = new uint8_t[code.size() + 1];
     copy(code.begin(), code.end(), new_code);
-    new_code[code.size()] = NULL_CODE_BYTE; // null-terminate the code
+    new_code[code.size()] = 0; // null-terminate the code
     map.insert({sym, new_code});
     symbols.push_back(sym);
 }

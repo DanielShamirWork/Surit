@@ -50,11 +50,11 @@ const HuffmanDict generate_huffman_dict(const HuffmanNode * const tree_root) {
         }
         
         if (node->right != nullptr) {
-            code_stack.push(1);
+            code_stack.push(BIT_TO_CODE(1));
             node_stack.push(node->right);
         }
         if (node->left != nullptr) {
-            code_stack.push(0);
+            code_stack.push(BIT_TO_CODE(0));
             node_stack.push(node->left);
         }
         if (node->left == nullptr && node->right == nullptr) {
