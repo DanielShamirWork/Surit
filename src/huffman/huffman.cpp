@@ -1,9 +1,9 @@
 #include "huffman.h"
 
 #include "../freq/freq.h"
-#include <unordered_map>
 #include <queue>
 #include <stack>
+#include <functional>
 
 using namespace std;
 
@@ -30,6 +30,40 @@ HuffmanNode *build_tree(const symbol * const str) {
     }
     
     return min_heap.top();
+}
+
+const HuffmanDict generate_huffman_dict(const HuffmanNode * const tree_root) {
+    HuffmanDict dict;
+    stack<const HuffmanNode *> node_stack;
+    stack<uint8_t> code_stack;
+    vector<uint8_t> code;
+
+    // DFS iteration over the tree
+    node_stack.push(tree_root);
+    while (!node_stack.empty()) {
+        const HuffmanNode * const node = node_stack.top();
+        node_stack.pop();
+
+        if (code_stack.size() > 0) {
+            code.push_back(code_stack.top());
+            code_stack.pop();
+        }
+        
+        if (node->right != nullptr) {
+            code_stack.push(1);
+            node_stack.push(node->right);
+        }
+        if (node->left != nullptr) {
+            code_stack.push(0);
+            node_stack.push(node->left);
+        }
+        if (node->left == nullptr && node->right == nullptr) {
+            dict.allocate_symbol(node->sym, code);
+            code.pop_back(); // don't forget to erase the last code
+        }
+    }
+
+    return dict;
 }
 
 symbol *compress(const symbol * const str) {

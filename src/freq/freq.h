@@ -8,4 +8,4 @@ using namespace std;
 
 const unordered_map<symbol, uint64_t> frequencies(const symbol * const str);
 
-#endif
+#endif // FREQ_H
