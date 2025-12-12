@@ -17,7 +17,7 @@ public:
     ~HuffmanFileWriter();
 
     // void write_tree(const )
-    void write_bits(const uint8_t* bits);
+    void write_code(const uint8_t* code);
     void flush_bits();
 
 private:
